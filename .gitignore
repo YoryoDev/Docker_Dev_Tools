@@ -1,0 +1,9 @@
+# Variables locales y secretos
+.env
+**/.env
+
+# Archivos del sistema y editores
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
