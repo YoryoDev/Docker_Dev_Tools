@@ -1,0 +1,8 @@
+name: dev-tools-cyberchef
+
+services:
+  cyberchef:
+    image: ghcr.io/gchq/cyberchef:latest
+    restart: "no"
+    ports:
+      - "127.0.0.1:${CYBERCHEF_PORT:-8085}:8080"
