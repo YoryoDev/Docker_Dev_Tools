@@ -1,0 +1,52 @@
+name: dev-tools-hoppscotch
+
+x-hoppscotch-environment: &hoppscotch-environment
+  DATABASE_URL: postgresql://hoppscotch:${HOPPSCOTCH_DB_PASSWORD:-hoppscotch}@database:5432/hoppscotch
+  DATA_ENCRYPTION_KEY: ${HOPPSCOTCH_ENCRYPTION_KEY:-0123456789abcdef0123456789abcdef}
+  WHITELISTED_ORIGINS: http://localhost:${HOPPSCOTCH_PORT:-8084},app://localhost_3200,app://hoppscotch
+  VITE_BASE_URL: http://localhost:${HOPPSCOTCH_PORT:-8084}
+  VITE_SHORTCODE_BASE_URL: http://localhost:${HOPPSCOTCH_PORT:-8084}
+  VITE_ADMIN_URL: http://localhost:${HOPPSCOTCH_PORT:-8084}/admin
+  VITE_BACKEND_GQL_URL: http://localhost:${HOPPSCOTCH_PORT:-8084}/backend/graphql
+  VITE_BACKEND_WS_URL: ws://localhost:${HOPPSCOTCH_PORT:-8084}/backend/graphql
+  VITE_BACKEND_API_URL: http://localhost:${HOPPSCOTCH_PORT:-8084}/backend/v1
+  ENABLE_SUBPATH_BASED_ACCESS: "true"
+
+services:
+  database:
+    image: postgres:15-alpine
+    restart: "no"
+    environment:
+      POSTGRES_USER: hoppscotch
+      POSTGRES_PASSWORD: ${HOPPSCOTCH_DB_PASSWORD:-hoppscotch}
+      POSTGRES_DB: hoppscotch
+    volumes:
+      - hoppscotch-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hoppscotch -d hoppscotch"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  migrate:
+    image: hoppscotch/hoppscotch:latest
+    restart: "no"
+    environment: *hoppscotch-environment
+    entrypoint: ["sh", "-c"]
+    command: ["pnpm exec prisma migrate deploy"]
+    depends_on:
+      database:
+        condition: service_healthy
+
+  hoppscotch:
+    image: hoppscotch/hoppscotch:latest
+    restart: "no"
+    environment: *hoppscotch-environment
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    ports:
+      - "127.0.0.1:${HOPPSCOTCH_PORT:-8084}:80"
+
+volumes:
+  hoppscotch-data:
