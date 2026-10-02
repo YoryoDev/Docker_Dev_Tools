@@ -3,6 +3,6 @@ name: dev-tools-excalidraw
 services:
   excalidraw:
     image: excalidraw/excalidraw:latest
-    restart: unless-stopped
+    restart: "no"
     ports:
       - "127.0.0.1:${EXCALIDRAW_PORT:-8081}:80"
