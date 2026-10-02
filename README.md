@@ -10,6 +10,9 @@ vive en su propia carpeta y puede iniciarse de forma independiente.
 | [IT Tools](./it-tools/) | Utilidades para desarrolladores | http://localhost:8080 |
 | [Excalidraw](./excalidraw/) | Pizarra y diagramas colaborativos | http://localhost:8081 |
 | [PlantUML](./plantuml/) | Renderizado de diagramas UML | http://localhost:8082 |
+| [Draw.io](./drawio/) | Creación de diagramas técnicos | http://localhost:8083 |
+| [Hoppscotch](./hoppscotch/) | Desarrollo y pruebas de APIs | http://localhost:8084 |
+| [CyberChef](./cyberchef/) | Conversión y análisis de datos | http://localhost:8085 |
 
 ## Requisitos
 
@@ -24,6 +27,9 @@ Inicia una herramienta desde la raíz del repositorio:
 docker compose -f it-tools/compose.yaml up -d
 docker compose -f excalidraw/compose.yaml up -d
 docker compose -f plantuml/compose.yaml up -d
+docker compose -f drawio/compose.yaml up -d
+docker compose -f hoppscotch/compose.yaml up -d
+docker compose -f cyberchef/compose.yaml up -d
 ```
 
 Para detenerla, sustituye `up -d` por `down`. Por ejemplo:
@@ -46,6 +52,9 @@ Los puertos se pueden cambiar mediante variables de entorno:
 IT_TOOLS_PORT=9000 docker compose -f it-tools/compose.yaml up -d
 EXCALIDRAW_PORT=9001 docker compose -f excalidraw/compose.yaml up -d
 PLANTUML_PORT=9002 docker compose -f plantuml/compose.yaml up -d
+DRAWIO_PORT=9003 docker compose -f drawio/compose.yaml up -d
+HOPPSCOTCH_PORT=9004 docker compose -f hoppscotch/compose.yaml up -d
+CYBERCHEF_PORT=9005 docker compose -f cyberchef/compose.yaml up -d
 ```
 
 En PowerShell, define la variable antes de ejecutar Compose:
