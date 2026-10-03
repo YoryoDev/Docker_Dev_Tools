@@ -1,8 +1,30 @@
 name: dev-tools-excalidraw
 
 services:
-  excalidraw:
-    image: excalidraw/excalidraw:latest
+  canvas:
+    image: sanjibdevnath/mcp-excalidraw-local-canvas:latest
     restart: "no"
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      HOST: 0.0.0.0
+      EXCALIDRAW_DB_PATH: /app/data/excalidraw.db
     ports:
-      - "127.0.0.1:${EXCALIDRAW_PORT:-8081}:80"
+      - "127.0.0.1:${EXCALIDRAW_PORT:-8081}:3000"
+    volumes:
+      - excalidraw-data:/app/data
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - >-
+          require('http').get('http://127.0.0.1:3000/health',
+          response => process.exit(response.statusCode === 200 ? 0 : 1))
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+volumes:
+  excalidraw-data:

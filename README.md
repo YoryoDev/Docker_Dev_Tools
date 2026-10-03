@@ -8,7 +8,7 @@ vive en su propia carpeta y puede iniciarse de forma independiente.
 | Herramienta | Descripción | URL local |
 | --- | --- | --- |
 | [IT Tools](./it-tools/) | Utilidades para desarrolladores | http://localhost:8080 |
-| [Excalidraw](./excalidraw/) | Pizarra y diagramas colaborativos | http://localhost:8081 |
+| [Excalidraw MCP](./excalidraw/) | Pizarra local controlable por IA | http://localhost:8081 |
 | [PlantUML](./plantuml/) | Renderizado de diagramas UML | http://localhost:8082 |
 | [Draw.io](./drawio/) | Creación de diagramas técnicos | http://localhost:8083 |
 | [Hoppscotch](./hoppscotch/) | Desarrollo y pruebas de APIs | http://localhost:8084 |
