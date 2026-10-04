@@ -1,7 +1,11 @@
 {
   "$schema": "https://opencode.ai/config.json",
+
+  // MCP disponibles únicamente dentro de este proyecto.
+  // Copia solo los servidores que necesites en otros proyectos.
   "mcp": {
     "servers": {
+      // Requiere iniciar excalidraw/compose.yaml.
       "excalidraw": {
         "type": "local",
         "command": [
@@ -24,6 +28,7 @@
           "catalog": 120000
         }
       },
+      // Requiere iniciar Hoppscotch e iniciar sesión en el navegador.
       "hoppscotch": {
         "type": "local",
         "command": [
@@ -35,8 +40,11 @@
           "@hoppscotch/mcp-server@1.0.1"
         ],
         "environment": {
+          // Dirección de la instancia local.
           "HOPPSCOTCH_SERVER_URL": "http://127.0.0.1:8084",
+          // Herramientas habituales sin administración avanzada.
           "HOPPSCOTCH_TOOL_PROFILE": "core",
+          // Evita cambios sensibles desde un .env ajeno.
           "HOPPSCOTCH_STRICT_ENV": "true"
         }
       }
