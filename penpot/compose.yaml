@@ -1,0 +1,145 @@
+name: dev-tools-penpot
+
+x-penpot-flags: &penpot-flags
+  PENPOT_FLAGS: disable-email-verification enable-prepl-server disable-secure-session-cookies
+
+x-penpot-public-uri: &penpot-public-uri
+  PENPOT_PUBLIC_URI: http://localhost:${PENPOT_PORT:-8087}
+
+x-penpot-secret: &penpot-secret
+  PENPOT_SECRET_KEY: ${PENPOT_SECRET_KEY:?Define PENPOT_SECRET_KEY en penpot/.env}
+
+x-penpot-database: &penpot-database
+  PENPOT_DATABASE_URI: postgresql://penpot-postgres/penpot
+  PENPOT_DATABASE_USERNAME: penpot
+  PENPOT_DATABASE_PASSWORD: ${PENPOT_DB_PASSWORD:?Define PENPOT_DB_PASSWORD en penpot/.env}
+
+services:
+  penpot-frontend:
+    image: penpotapp/frontend:${PENPOT_VERSION:-2.15.4}
+    restart: "no"
+    depends_on:
+      - penpot-backend
+      - penpot-exporter
+    environment:
+      <<: [*penpot-flags, *penpot-public-uri]
+      PENPOT_HTTP_SERVER_MAX_BODY_SIZE: "367001600"
+      PENPOT_HTTP_SERVER_MAX_MULTIPART_BODY_SIZE: "367001600"
+    ports:
+      - "127.0.0.1:${PENPOT_PORT:-8087}:8080"
+    volumes:
+      - penpot-assets:/opt/data/assets
+    networks:
+      - penpot
+
+  penpot-backend:
+    image: penpotapp/backend:${PENPOT_VERSION:-2.15.4}
+    restart: "no"
+    depends_on:
+      penpot-postgres:
+        condition: service_healthy
+      penpot-valkey:
+        condition: service_healthy
+    environment:
+      <<: [*penpot-flags, *penpot-public-uri, *penpot-secret, *penpot-database]
+      PENPOT_HTTP_SERVER_MAX_BODY_SIZE: "367001600"
+      PENPOT_HTTP_SERVER_MAX_MULTIPART_BODY_SIZE: "367001600"
+      PENPOT_REDIS_URI: redis://penpot-valkey/0
+      PENPOT_OBJECTS_STORAGE_BACKEND: fs
+      PENPOT_OBJECTS_STORAGE_FS_DIRECTORY: /opt/data/assets
+      PENPOT_TELEMETRY_ENABLED: "false"
+    volumes:
+      - penpot-assets:/opt/data/assets
+    networks:
+      - penpot
+
+  penpot-exporter:
+    image: penpotapp/exporter:${PENPOT_VERSION:-2.15.4}
+    restart: "no"
+    depends_on:
+      penpot-valkey:
+        condition: service_healthy
+    environment:
+      <<: *penpot-secret
+      PENPOT_PUBLIC_URI: http://penpot-frontend:8080
+      PENPOT_REDIS_URI: redis://penpot-valkey/0
+    networks:
+      - penpot
+
+  penpot-postgres:
+    image: postgres:15-alpine
+    restart: "no"
+    stop_signal: SIGINT
+    environment:
+      POSTGRES_INITDB_ARGS: --data-checksums
+      POSTGRES_DB: penpot
+      POSTGRES_USER: penpot
+      POSTGRES_PASSWORD: ${PENPOT_DB_PASSWORD:?Define PENPOT_DB_PASSWORD en penpot/.env}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U penpot"]
+      interval: 2s
+      timeout: 10s
+      retries: 5
+      start_period: 2s
+    volumes:
+      - penpot-postgres:/var/lib/postgresql/data
+    networks:
+      - penpot
+
+  penpot-valkey:
+    image: valkey/valkey:8.1-alpine
+    restart: "no"
+    environment:
+      VALKEY_EXTRA_FLAGS: --maxmemory 128mb --maxmemory-policy volatile-lfu
+    healthcheck:
+      test: ["CMD", "valkey-cli", "ping"]
+      interval: 2s
+      timeout: 3s
+      retries: 10
+      start_period: 3s
+    networks:
+      - penpot
+
+  penpot-local-mcp:
+    image: node:22-alpine
+    restart: "no"
+    init: true
+    working_dir: /workspace
+    entrypoint: ["sh", "-c"]
+    command:
+      - >-
+        corepack enable &&
+        exec npx -y @penpot/mcp@${PENPOT_VERSION:-2.15.4}
+    environment:
+      PNPM_CONFIG_DANGEROUSLY_ALLOW_ALL_BUILDS: "true"
+      PENPOT_MCP_SERVER_HOST: 0.0.0.0
+      PENPOT_MCP_SERVER_PORT: "4401"
+      PENPOT_MCP_WEBSOCKET_PORT: "4402"
+      PENPOT_MCP_PLUGIN_SERVER_HOST: 0.0.0.0
+      PENPOT_MCP_REPL_ENABLE: "false"
+      PENPOT_MCP_LOG_LEVEL: info
+    ports:
+      - "127.0.0.1:${PENPOT_MCP_PLUGIN_PORT:-4400}:4400"
+      - "127.0.0.1:${PENPOT_MCP_PORT:-4401}:4401"
+      - "127.0.0.1:${PENPOT_MCP_WEBSOCKET_PORT:-4402}:4402"
+    volumes:
+      - "${PENPOT_MCP_FILES:-./files}:/workspace"
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - >-
+          fetch('http://127.0.0.1:4401/mcp')
+          .then(() => process.exit(0)).catch(() => process.exit(1))
+      interval: 5s
+      timeout: 3s
+      retries: 30
+      start_period: 30s
+
+volumes:
+  penpot-assets:
+  penpot-postgres:
+
+networks:
+  penpot:

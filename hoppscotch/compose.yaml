@@ -1,7 +1,7 @@
 name: dev-tools-hoppscotch
 
 x-hoppscotch-environment: &hoppscotch-environment
-  DATABASE_URL: postgresql://hoppscotch:${HOPPSCOTCH_DB_PASSWORD:?Define HOPPSCOTCH_DB_PASSWORD en hoppscotch/.env}@database:5432/hoppscotch
+  DATABASE_URL: postgresql://hoppscotch:${HOPPSCOTCH_DB_PASSWORD_URL:?Define HOPPSCOTCH_DB_PASSWORD_URL en hoppscotch/.env}@database:5432/hoppscotch
   DATA_ENCRYPTION_KEY: ${HOPPSCOTCH_ENCRYPTION_KEY:?Define HOPPSCOTCH_ENCRYPTION_KEY en hoppscotch/.env}
   WHITELISTED_ORIGINS: http://localhost:${HOPPSCOTCH_PORT:-8084},app://localhost_3200,app://hoppscotch
   VITE_BASE_URL: http://localhost:${HOPPSCOTCH_PORT:-8084}

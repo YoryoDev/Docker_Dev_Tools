@@ -36,6 +36,9 @@ HOPPSCOTCH_PORT=9004 docker compose up -d
 
 `HOPPSCOTCH_ENCRYPTION_KEY` debe tener exactamente 32 caracteres. No cambies
 los secretos después del primer inicio si ya existen datos cifrados.
+`HOPPSCOTCH_DB_PASSWORD_URL` debe contener la misma contraseña que
+`HOPPSCOTCH_DB_PASSWORD`, pero con los caracteres reservados codificados para
+URL.
 
 > Si cambias el puerto después del primer inicio, inicia nuevamente todo el
 > proyecto con la misma variable para que las URLs internas coincidan.

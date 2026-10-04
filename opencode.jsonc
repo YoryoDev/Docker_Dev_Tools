@@ -47,6 +47,18 @@
           // Evita cambios sensibles desde un .env ajeno.
           "HOPPSCOTCH_STRICT_ENV": "true"
         }
+      },
+
+      // MCP oficial de Penpot ejecutado por penpot/compose.yaml.
+      "penpot": {
+        "type": "remote",
+        "url": "http://127.0.0.1:4401/mcp",
+        "oauth": false,
+        "timeout": {
+          "startup": 60000,
+          "catalog": 60000,
+          "execution": 300000
+        }
       }
     }
   }
