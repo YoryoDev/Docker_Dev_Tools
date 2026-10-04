@@ -90,3 +90,14 @@ docker compose -f it-tools/compose.yaml up -d
 > Estas aplicaciones se publican en `127.0.0.1` por defecto y solo son
 > accesibles desde el equipo local. Para exponerlas en la red, cambia
 > `127.0.0.1` por `0.0.0.0` en el `compose.yaml` correspondiente.
+
+## Integración MCP con OpenCode
+
+- **Globales:** Draw.io y PlantUML, configurados en
+  `~/.config/opencode/opencode.json`.
+- **Del proyecto:** Excalidraw y Hoppscotch, configurados en
+  [`opencode.jsonc`](./opencode.jsonc).
+
+Los MCP basados en Node se ejecutan con la instalación global de Node.js 26
+administrada por `mise`. Comprueba su estado con `opencode mcp list` después de
+iniciar los contenedores correspondientes.

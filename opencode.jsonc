@@ -23,6 +23,22 @@
           "startup": 120000,
           "catalog": 120000
         }
+      },
+      "hoppscotch": {
+        "type": "local",
+        "command": [
+          "/home/yoryo/.local/bin/mise",
+          "exec",
+          "--",
+          "npx",
+          "-y",
+          "@hoppscotch/mcp-server@1.0.1"
+        ],
+        "environment": {
+          "HOPPSCOTCH_SERVER_URL": "http://127.0.0.1:8084",
+          "HOPPSCOTCH_TOOL_PROFILE": "core",
+          "HOPPSCOTCH_STRICT_ENV": "true"
+        }
       }
     }
   }

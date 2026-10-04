@@ -45,3 +45,14 @@ Para eliminar también todos los datos almacenados:
 ```bash
 docker compose down -v
 ```
+
+## MCP para OpenCode
+
+El servidor MCP oficial `@hoppscotch/mcp-server` está configurado únicamente
+para este proyecto y apunta a `http://127.0.0.1:8084`. Se ejecuta con Node.js 26
+mediante `mise` y usa el perfil `core`, que expone las operaciones habituales
+sin habilitar toda la administración avanzada.
+
+Después de iniciar Hoppscotch, la primera operación MCP abrirá el navegador para
+iniciar sesión. La sesión se guarda en `~/.config/hoppscotch-mcp/`. La Community
+Edition puede solicitar un nuevo inicio de sesión cuando expire el token.
