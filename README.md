@@ -13,6 +13,9 @@ vive en su propia carpeta y puede iniciarse de forma independiente.
 | [Draw.io](./drawio/) | Creación de diagramas técnicos | http://localhost:8083 |
 | [Hoppscotch](./hoppscotch/) | Desarrollo y pruebas de APIs | http://localhost:8084 |
 | [CyberChef](./cyberchef/) | Conversión y análisis de datos | http://localhost:8085 |
+| [ChartDB](./chartdb/) | Diseño y visualización de bases de datos | http://localhost:8086 |
+| [Portainer CE](./portainer/) | Gestión local de contenedores Docker | https://localhost:9443 |
+| [WinDocker](./WinDocker/) | Máquina virtual Windows 11 con KVM | http://localhost:8006 |
 
 ## Requisitos
 
@@ -28,8 +31,11 @@ docker compose -f it-tools/compose.yaml up -d
 docker compose -f excalidraw/compose.yaml up -d
 docker compose -f plantuml/compose.yaml up -d
 docker compose -f drawio/compose.yaml up -d
-docker compose -f hoppscotch/compose.yaml up -d
+docker compose --env-file hoppscotch/.env -f hoppscotch/compose.yaml up -d
 docker compose -f cyberchef/compose.yaml up -d
+docker compose -f chartdb/compose.yaml up -d
+docker compose -f portainer/compose.yaml up -d
+docker compose --env-file WinDocker/.env -f WinDocker/compose.yaml up -d
 ```
 
 Para detenerla, sustituye `up -d` por `down`. Por ejemplo:
@@ -46,6 +52,20 @@ docker compose -f it-tools/compose.yaml logs -f
 
 ## Configuración
 
+Cada carpeta contiene un `.env.example` con las variables disponibles. Para
+personalizar un servicio, entra en su carpeta y copia el ejemplo:
+
+```bash
+cd it-tools
+cp .env.example .env
+docker compose up -d
+```
+
+Hoppscotch y WinDocker requieren crear y completar su `.env` antes del primer
+inicio. En los demás servicios es opcional porque existen valores por defecto.
+Si ejecutas Compose desde la raíz, indica el archivo explícitamente con
+`--env-file carpeta/.env`.
+
 Los puertos se pueden cambiar mediante variables de entorno:
 
 ```bash
@@ -53,8 +73,11 @@ IT_TOOLS_PORT=9000 docker compose -f it-tools/compose.yaml up -d
 EXCALIDRAW_PORT=9001 docker compose -f excalidraw/compose.yaml up -d
 PLANTUML_PORT=9002 docker compose -f plantuml/compose.yaml up -d
 DRAWIO_PORT=9003 docker compose -f drawio/compose.yaml up -d
-HOPPSCOTCH_PORT=9004 docker compose -f hoppscotch/compose.yaml up -d
+HOPPSCOTCH_PORT=9004 docker compose --env-file hoppscotch/.env -f hoppscotch/compose.yaml up -d
 CYBERCHEF_PORT=9005 docker compose -f cyberchef/compose.yaml up -d
+CHARTDB_PORT=9006 docker compose -f chartdb/compose.yaml up -d
+PORTAINER_PORT=9444 docker compose -f portainer/compose.yaml up -d
+WINDOCKER_WEB_PORT=8016 docker compose --env-file WinDocker/.env -f WinDocker/compose.yaml up -d
 ```
 
 En PowerShell, define la variable antes de ejecutar Compose:

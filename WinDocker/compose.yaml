@@ -1,0 +1,35 @@
+name: dev-tools-windocker
+
+services:
+  windows:
+    image: dockurr/windows:latest
+    container_name: windocker
+    environment:
+      VERSION: "11"
+      LANGUAGE: "Spanish"
+      REGION: "es-BO"
+      KEYBOARD: "en-US"
+      USERNAME: "${WINDOWS_USERNAME:?Define WINDOWS_USERNAME en WinDocker/.env}"
+      PASSWORD: "${WINDOWS_PASSWORD:?Define WINDOWS_PASSWORD en WinDocker/.env}"
+      HOST: "WinDocker"
+      RAM_SIZE: "6G"
+      CPU_CORES: "4"
+      CPU_MODEL: "host"
+      DISK_SIZE: "100G"
+      DISK_FMT: "raw"
+      PROTECT: "Y"
+      ARGUMENTS: "-rtc base=localtime,clock=host,driftfix=slew"
+    devices:
+      - /dev/kvm
+      - /dev/net/tun
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - "127.0.0.1:${WINDOCKER_WEB_PORT:-8006}:8006"
+      - "127.0.0.1:${WINDOCKER_RDP_PORT:-3389}:3389/tcp"
+      - "127.0.0.1:${WINDOCKER_RDP_PORT:-3389}:3389/udp"
+    volumes:
+      - "${WINDOCKER_STORAGE:-/home/yoryo/.local/share/windocker}:/storage"
+      - "${WINDOCKER_SHARED:-/home/yoryo/Workspace}:/shared"
+    restart: "no"
+    stop_grace_period: 2m
