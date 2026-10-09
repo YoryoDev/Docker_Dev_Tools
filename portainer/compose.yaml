@@ -4,6 +4,8 @@ services:
   portainer:
     image: portainer/portainer-ce:${PORTAINER_VERSION:-2.45.2}
     restart: "no"
+    security_opt:
+      - no-new-privileges:true
     ports:
       - "127.0.0.1:${PORTAINER_PORT:-9443}:9443"
     volumes:

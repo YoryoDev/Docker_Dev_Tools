@@ -4,6 +4,8 @@ services:
   canvas:
     image: sanjibdevnath/mcp-excalidraw-local-canvas:${EXCALIDRAW_VERSION:-v1.1.1}
     restart: "no"
+    security_opt:
+      - no-new-privileges:true
     environment:
       NODE_ENV: production
       PORT: 3000
