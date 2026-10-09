@@ -94,14 +94,26 @@ docker compose -f it-tools/compose.yaml up -d
 > accesibles desde el equipo local. Para exponerlas en la red, cambia
 > `127.0.0.1` por `0.0.0.0` en el `compose.yaml` correspondiente.
 
-## Integración MCP con OpenCode
+## Integración MCP (OpenCode y Claude Code)
 
-- **Globales:** Draw.io y PlantUML, configurados en
-  `~/.config/opencode/opencode.json`.
-- **Del proyecto:** Excalidraw, Hoppscotch y Penpot, configurados en
-  [`opencode.jsonc`](./opencode.jsonc).
+Draw.io, PlantUML, Excalidraw, Hoppscotch y Penpot se configuran en dos archivos equivalentes.
+Copia el que corresponda a la raíz de tu proyecto:
 
-Draw.io, PlantUML y Hoppscotch usan la instalación global de Node.js 26
-administrada por `mise`. El MCP de Penpot utiliza Node.js 22 dentro de Docker,
-la versión probada oficialmente. Comprueba el estado con `opencode mcp list`
-después de iniciar los contenedores correspondientes.
+| Cliente | Archivo | Comprobar |
+| --- | --- | --- |
+| OpenCode | [`opencode.jsonc`](./opencode.jsonc) | `opencode mcp list` |
+| Claude Code | [`.mcp.json`](./.mcp.json) | `claude mcp list` |
+
+Requisitos: Docker (Excalidraw) y Node.js 22 o superior (Draw.io, PlantUML y
+Hoppscotch). Inicia
+antes los contenedores correspondientes; el MCP de Penpot lo expone su propio
+`compose.yaml`. Claude Code pide aprobar los servidores de `.mcp.json` la
+primera vez.
+
+Los archivos son idénticos en Windows, macOS y Linux. Hoppscotch se lanza con
+`node` y `shell: true`, que usa `npx` o `npx.cmd` según el sistema, así que no
+hace falta el envoltorio `cmd /c` en Windows.
+
+Draw.io y PlantUML usan tus contenedores locales (puertos 8083 y 8082 por
+defecto); si cambias el puerto, actualiza `DRAWIO_BASE_URL` o
+`PLANTUML_SERVER_URL`.

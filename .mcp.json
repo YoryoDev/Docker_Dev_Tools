@@ -1,0 +1,61 @@
+{
+  "mcpServers": {
+    "drawio": {
+      "type": "stdio",
+      "command": "node",
+      "args": [
+        "-e",
+        "require('child_process').spawn('npx -y @drawio/mcp@1.6.3',{stdio:'inherit',shell:true}).on('exit',c=>process.exit(c??1))"
+      ],
+      "env": {
+        "DRAWIO_BASE_URL": "http://127.0.0.1:8083/"
+      }
+    },
+    "plantuml": {
+      "type": "stdio",
+      "command": "node",
+      "args": [
+        "-e",
+        "require('child_process').spawn('npx -y plantuml-mcp-server@0.2.4',{stdio:'inherit',shell:true}).on('exit',c=>process.exit(c??1))"
+      ],
+      "env": {
+        "PLANTUML_SERVER_URL": "http://127.0.0.1:8082"
+      }
+    },
+    "excalidraw": {
+      "type": "stdio",
+      "command": "docker",
+      "args": [
+        "run",
+        "--interactive",
+        "--rm",
+        "--network",
+        "dev-tools-excalidraw_default",
+        "--mount",
+        "source=dev-tools-excalidraw_excalidraw-data,target=/app/data",
+        "--env",
+        "EXPRESS_SERVER_URL=http://canvas:3000",
+        "--env",
+        "ENABLE_CANVAS_SYNC=true",
+        "sanjibdevnath/mcp-excalidraw-local:v1.1.1"
+      ]
+    },
+    "hoppscotch": {
+      "type": "stdio",
+      "command": "node",
+      "args": [
+        "-e",
+        "require('child_process').spawn('npx -y @hoppscotch/mcp-server@1.0.1',{stdio:'inherit',shell:true}).on('exit',c=>process.exit(c??1))"
+      ],
+      "env": {
+        "HOPPSCOTCH_SERVER_URL": "http://127.0.0.1:8084",
+        "HOPPSCOTCH_TOOL_PROFILE": "core",
+        "HOPPSCOTCH_STRICT_ENV": "true"
+      }
+    },
+    "penpot": {
+      "type": "http",
+      "url": "http://127.0.0.1:4401/mcp"
+    }
+  }
+}

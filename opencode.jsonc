@@ -1,65 +1,85 @@
 {
   "$schema": "https://opencode.ai/config.json",
 
-  // MCP disponibles únicamente dentro de este proyecto.
-  // Copia solo los servidores que necesites en otros proyectos.
+  // MCP de Docker Dev Tools. Copia este archivo (o solo los servidores que
+  // necesites) en la raíz de tu proyecto. Para Claude Code usa .mcp.json.
+  // Requisitos: Docker (Excalidraw) y Node.js 22+ con npx (Draw.io, PlantUML, Hoppscotch).
   "mcp": {
-    "servers": {
-      // Requiere iniciar excalidraw/compose.yaml.
-      "excalidraw": {
-        "type": "local",
-        "command": [
-          "docker",
-          "run",
-          "--interactive",
-          "--rm",
-          "--network",
-          "dev-tools-excalidraw_default",
-          "--mount",
-          "source=dev-tools-excalidraw_excalidraw-data,target=/app/data",
-          "--env",
-          "EXPRESS_SERVER_URL=http://canvas:3000",
-          "--env",
-          "ENABLE_CANVAS_SYNC=true",
-          "sanjibdevnath/mcp-excalidraw-local:latest"
-        ],
-        "timeout": {
-          "startup": 120000,
-          "catalog": 120000
-        }
+    // Requiere iniciar drawio/compose.yaml. Abre los diagramas en tu navegador.
+    "drawio": {
+      "type": "local",
+      "command": [
+        "node",
+        "-e",
+        "require('child_process').spawn('npx -y @drawio/mcp@1.6.3',{stdio:'inherit',shell:true}).on('exit',c=>process.exit(c??1))"
+      ],
+      "environment": {
+        "DRAWIO_BASE_URL": "http://127.0.0.1:8083/"
       },
-      // Requiere iniciar Hoppscotch e iniciar sesión en el navegador.
-      "hoppscotch": {
-        "type": "local",
-        "command": [
-          "/home/yoryo/.local/bin/mise",
-          "exec",
-          "--",
-          "npx",
-          "-y",
-          "@hoppscotch/mcp-server@1.0.1"
-        ],
-        "environment": {
-          // Dirección de la instancia local.
-          "HOPPSCOTCH_SERVER_URL": "http://127.0.0.1:8084",
-          // Herramientas habituales sin administración avanzada.
-          "HOPPSCOTCH_TOOL_PROFILE": "core",
-          // Evita cambios sensibles desde un .env ajeno.
-          "HOPPSCOTCH_STRICT_ENV": "true"
-        }
-      },
+      "timeout": 120000
+    },
 
-      // MCP oficial de Penpot ejecutado por penpot/compose.yaml.
-      "penpot": {
-        "type": "remote",
-        "url": "http://127.0.0.1:4401/mcp",
-        "oauth": false,
-        "timeout": {
-          "startup": 60000,
-          "catalog": 60000,
-          "execution": 300000
-        }
-      }
+    // Requiere iniciar plantuml/compose.yaml.
+    "plantuml": {
+      "type": "local",
+      "command": [
+        "node",
+        "-e",
+        "require('child_process').spawn('npx -y plantuml-mcp-server@0.2.4',{stdio:'inherit',shell:true}).on('exit',c=>process.exit(c??1))"
+      ],
+      "environment": {
+        "PLANTUML_SERVER_URL": "http://127.0.0.1:8082"
+      },
+      "timeout": 120000
+    },
+
+    // Requiere iniciar excalidraw/compose.yaml.
+    "excalidraw": {
+      "type": "local",
+      "command": [
+        "docker",
+        "run",
+        "--interactive",
+        "--rm",
+        "--network",
+        "dev-tools-excalidraw_default",
+        "--mount",
+        "source=dev-tools-excalidraw_excalidraw-data,target=/app/data",
+        "--env",
+        "EXPRESS_SERVER_URL=http://canvas:3000",
+        "--env",
+        "ENABLE_CANVAS_SYNC=true",
+        "sanjibdevnath/mcp-excalidraw-local:v1.1.1"
+      ],
+      "timeout": 120000
+    },
+
+    // Requiere iniciar hoppscotch/compose.yaml e iniciar sesión en el navegador.
+    "hoppscotch": {
+      "type": "local",
+      // Lanzador con node: resuelve npx o npx.cmd según el sistema operativo.
+      "command": [
+        "node",
+        "-e",
+        "require('child_process').spawn('npx -y @hoppscotch/mcp-server@1.0.1',{stdio:'inherit',shell:true}).on('exit',c=>process.exit(c??1))"
+      ],
+      "environment": {
+        // Dirección de la instancia local.
+        "HOPPSCOTCH_SERVER_URL": "http://127.0.0.1:8084",
+        // Herramientas habituales sin administración avanzada.
+        "HOPPSCOTCH_TOOL_PROFILE": "core",
+        // Evita cambios sensibles desde un .env ajeno.
+        "HOPPSCOTCH_STRICT_ENV": "true"
+      },
+      "timeout": 120000
+    },
+
+    // MCP oficial de Penpot, expuesto por penpot/compose.yaml.
+    "penpot": {
+      "type": "remote",
+      "url": "http://127.0.0.1:4401/mcp",
+      "oauth": false,
+      "timeout": 60000
     }
   }
 }
