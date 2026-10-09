@@ -2,7 +2,7 @@ name: dev-tools-portainer
 
 services:
   portainer:
-    image: portainer/portainer-ce:lts
+    image: portainer/portainer-ce:${PORTAINER_VERSION:-2.45.2}
     restart: "no"
     ports:
       - "127.0.0.1:${PORTAINER_PORT:-9443}:9443"

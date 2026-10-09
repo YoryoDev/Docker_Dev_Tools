@@ -2,7 +2,7 @@ name: dev-tools-windocker
 
 services:
   windows:
-    image: dockurr/windows:latest
+    image: dockurr/windows:${WINDOCKER_VERSION:-6.06}
     container_name: windocker
     environment:
       VERSION: "11"
@@ -29,7 +29,7 @@ services:
       - "127.0.0.1:${WINDOCKER_RDP_PORT:-3389}:3389/tcp"
       - "127.0.0.1:${WINDOCKER_RDP_PORT:-3389}:3389/udp"
     volumes:
-      - "${WINDOCKER_STORAGE:-/home/yoryo/.local/share/windocker}:/storage"
-      - "${WINDOCKER_SHARED:-/home/yoryo/Workspace}:/shared"
+      - "${WINDOCKER_STORAGE:-./storage}:/storage"
+      - "${WINDOCKER_SHARED:-./shared}:/shared"
     restart: "no"
     stop_grace_period: 2m

@@ -2,7 +2,7 @@ name: dev-tools-drawio
 
 services:
   drawio:
-    image: jgraph/drawio:latest
+    image: jgraph/drawio:${DRAWIO_VERSION:-32.4.1}
     restart: "no"
     ports:
       - "127.0.0.1:${DRAWIO_PORT:-8083}:8080"

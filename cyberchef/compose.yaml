@@ -2,7 +2,7 @@ name: dev-tools-cyberchef
 
 services:
   cyberchef:
-    image: ghcr.io/gchq/cyberchef:latest
+    image: ghcr.io/gchq/cyberchef:${CYBERCHEF_VERSION:-11.5.0}
     restart: "no"
     ports:
       - "127.0.0.1:${CYBERCHEF_PORT:-8085}:8080"

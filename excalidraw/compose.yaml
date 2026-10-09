@@ -2,7 +2,7 @@ name: dev-tools-excalidraw
 
 services:
   canvas:
-    image: sanjibdevnath/mcp-excalidraw-local-canvas:latest
+    image: sanjibdevnath/mcp-excalidraw-local-canvas:${EXCALIDRAW_VERSION:-v1.1.1}
     restart: "no"
     environment:
       NODE_ENV: production

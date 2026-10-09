@@ -29,7 +29,7 @@ services:
       retries: 10
 
   migrate:
-    image: hoppscotch/hoppscotch:latest
+    image: hoppscotch/hoppscotch:${HOPPSCOTCH_VERSION:-2026.9.0}
     restart: "no"
     environment: *hoppscotch-environment
     entrypoint: ["sh", "-c"]
@@ -39,7 +39,7 @@ services:
         condition: service_healthy
 
   hoppscotch:
-    image: hoppscotch/hoppscotch:latest
+    image: hoppscotch/hoppscotch:${HOPPSCOTCH_VERSION:-2026.9.0}
     # El primer arranque puede salir con código 0 tras inicializar InfraConfig.
     restart: unless-stopped
     environment: *hoppscotch-environment

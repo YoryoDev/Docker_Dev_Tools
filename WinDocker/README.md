@@ -6,6 +6,8 @@ disponible en http://localhost:8006 y RDP en `localhost:3389`.
 
 ## Requisitos
 
+- Linux (recomendado) o Windows con WSL2 y virtualización anidada. macOS no es
+  compatible porque no ofrece KVM.
 - Linux con virtualización Intel VT-x o AMD-V habilitada.
 - Docker Engine con acceso a `/dev/kvm` y `/dev/net/tun`.
 - Al menos 6 GB de RAM disponibles.
@@ -37,9 +39,11 @@ El primer arranque descarga e instala Windows automáticamente y puede tardar
 bastante. Las credenciales de `.env` se utilizan para Windows y para proteger
 la interfaz web. El archivo está excluido de Git.
 
-Los datos persistentes se guardan por defecto en
-`/home/yoryo/.local/share/windocker`, mientras que `/home/yoryo/Workspace` se
-monta con acceso de lectura y escritura como la unidad compartida `Z:`.
+Los datos persistentes se guardan por defecto en `./storage` (junto a este
+`compose.yaml`), mientras que `./shared` se monta con acceso de lectura y
+escritura como la unidad compartida `Z:`. Ambas rutas son relativas para
+funcionar en cualquier sistema; define `WINDOCKER_STORAGE` y `WINDOCKER_SHARED`
+en `.env` para usar otras (por ejemplo, para conservar una instalación previa).
 
 ## Detener
 
