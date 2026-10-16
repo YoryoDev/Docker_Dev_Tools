@@ -1,0 +1,21 @@
+name: dev-tools-languagetool
+
+services:
+  languagetool:
+    image: erikvl87/languagetool:${LANGUAGETOOL_VERSION:-6.8}
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${LANGUAGETOOL_PORT:-8088}:8010"
+    environment:
+      Java_Xms: ${LANGUAGETOOL_JAVA_XMS:-256m}
+      Java_Xmx: ${LANGUAGETOOL_JAVA_XMX:-1g}
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:8010/v2/languages"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 30s

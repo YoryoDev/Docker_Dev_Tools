@@ -15,6 +15,7 @@ vive en su propia carpeta y puede iniciarse de forma independiente.
 | [CyberChef](./cyberchef/) | Conversión y análisis de datos | http://localhost:8085 |
 | [ChartDB](./chartdb/) | Diseño y visualización de bases de datos | http://localhost:8086 |
 | [Penpot](./penpot/) | Wireframes y prototipos de baja y alta fidelidad | http://localhost:8087 |
+| [LanguageTool](./languagetool/) | Corrector de gramática y ortografía (API) | http://localhost:8088 |
 | [Portainer CE](./portainer/) | Gestión local de contenedores Docker | https://localhost:9443 |
 | [WinDocker](./WinDocker/) | Máquina virtual Windows 11 con KVM | http://localhost:8006 |
 
@@ -36,6 +37,7 @@ docker compose --env-file hoppscotch/.env -f hoppscotch/compose.yaml up -d
 docker compose -f cyberchef/compose.yaml up -d
 docker compose -f chartdb/compose.yaml up -d
 docker compose --env-file penpot/.env -f penpot/compose.yaml up -d
+docker compose -f languagetool/compose.yaml up -d
 docker compose -f portainer/compose.yaml up -d
 docker compose --env-file WinDocker/.env -f WinDocker/compose.yaml up -d
 ```
@@ -79,6 +81,7 @@ HOPPSCOTCH_PORT=9004 docker compose --env-file hoppscotch/.env -f hoppscotch/com
 CYBERCHEF_PORT=9005 docker compose -f cyberchef/compose.yaml up -d
 CHARTDB_PORT=9006 docker compose -f chartdb/compose.yaml up -d
 PENPOT_PORT=9007 docker compose --env-file penpot/.env -f penpot/compose.yaml up -d
+LANGUAGETOOL_PORT=9008 docker compose -f languagetool/compose.yaml up -d
 PORTAINER_PORT=9444 docker compose -f portainer/compose.yaml up -d
 WINDOCKER_WEB_PORT=8016 docker compose --env-file WinDocker/.env -f WinDocker/compose.yaml up -d
 ```
